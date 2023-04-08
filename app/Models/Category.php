@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
+use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,8 +21,9 @@ class Category extends Model
 
     protected $fillable = [
         'id',
-        'title',
-        'parent_id'
+        'title->en',
+        'title->ua',
+        'parent_id',
     ];
 
     protected $casts = [
@@ -34,6 +37,6 @@ class Category extends Model
 
     public function getCurrentTitleAttribute(): string
     {
-        return $this->title[App::currentLocale()];
+        return json_decode($this->title, true)[App::currentLocale()];
     }
 }
